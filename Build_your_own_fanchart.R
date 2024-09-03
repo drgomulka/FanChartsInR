@@ -8,8 +8,8 @@ series = c('A191RO1Q156NBEA', 'CPALTT01USQ661S')
 Growth = getSymbols(series[1], src='FRED', auto.assign=FALSE) 
 CPI    = getSymbols(series[2], src='FRED', auto.assign=FALSE) 
 
-Data = inner_join(tibble(Date=time(Growth), Growth=coredata(Growth)), 
-                  tibble(Date=time(CPI), CPI=coredata(CPI)), by=c("Date")) %>% 
+Data = inner_join(tibble(Date=drop(time(Growth)), Growth=drop(coredata(Growth))), 
+                  tibble(Date=drop(time(CPI)), CPI=drop(coredata(CPI))), by=c("Date")) %>% 
   mutate(Inflation=100*(CPI/lag(CPI,4)-1)) %>%
   select(Date, Growth, Inflation) %>% 
   drop_na() # Drop missing obs to balance dataset
