@@ -84,8 +84,8 @@ forecast_data = tibble(Date     = rep(fdates, 2),
   select(-c("Forecast", "Variance")) %>% 
   {bind_rows(select(., -(nq+2)),                                # Drop last quantile 
              select(., -3) %>%                                  # Drop first quantile
-               arrange(Variable, desc(Date)) %>%                # Reverse order
-               rename_at(-(1:2), ~paste0("V",1:(nq-1))) )} %>%  # Shift names of reversed ones 
+               arrange(Variable, desc(Date)) )} %>%                # Reverse order
+               rename_at(-(1:2), ~paste0("V",1:(nq-1)))  %>%  # Shift names of reversed ones 
   pivot_longer(cols=-c(Date, Variable), names_to="Area", values_to="Coordinates") %>% 
   unite(VarArea, Variable, Area, remove=FALSE) %>%              # Create variable to index polygons
   bind_rows(pivot_longer(tail(Data,nb), cols = -Date, names_to="Variable", values_to="Backdata"), .)
