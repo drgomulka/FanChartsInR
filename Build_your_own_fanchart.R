@@ -94,9 +94,12 @@ forecast_data = tibble(Date     = rep(fdates, 2),
 band_colours = colorRampPalette(c(rbind(tail_colour, centre_colour), tail_colour), 
                                 space="Lab")(nv*nq+1)[-seq(1, nv*nq+1, nq)]
 
+df_rectangle <- data.frame( d_xmin=forecast_data$Date[nv*nb], d_xmax=max(forecast_data$Date), d_ymin=-Inf, d_ymax=Inf)
+  
 # Final plot
 ggplot(forecast_data) + 
-  geom_rect(aes(xmin=Date[nv*nb], xmax=max(Date), ymin=-Inf, ymax=Inf), fill=tail_colour, alpha=.2) +  
+  geom_rect(data=df_rectangle, mapping=aes(xmin=d_xmin,      xmax=d_xmax,    ymin=d_ymin, ymax=d_ymax), fill=tail_colour, alpha=.2) +  
+  #geom_rect(                   mapping=aes(xmin=Date[nv*nb], xmax=max(Date), ymin=-Inf,   ymax=Inf),    fill=tail_colour, alpha=.2) +  
   geom_polygon(aes(x=Date, y=Coordinates, group=VarArea, fill=VarArea)) +
   scale_fill_manual(values=band_colours) +
   geom_line(aes(x=Date, y=Backdata, group=Variable, colour=Variable)) +
